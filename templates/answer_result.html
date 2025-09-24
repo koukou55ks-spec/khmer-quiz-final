@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center;">
+        {% if is_correct %}
+            <h1 style="color: var(--primary-color);">🎉 正解！ 🎉</h1>
+        {% else %}
+            <h1 style="color: var(--secondary-color);">❌ 不正解... ❌</h1>
+        {% endif %}
+        
+        <hr>
+        
+        <h2>{{ correct_question.meaning }}</h2>
+        
+        <article>
+            <p style="font-size: 1.2em;">
+                正解は「<strong>{{ correct_question.khmer }}</strong> ({{ correct_question.pronunciation }})」です。
+            </p>
+        </article>
+        
+        <h3>💡選択肢の単語</h3>
+        {% for obj in choice_objects %}
+            <p>{{ obj.khmer }} ({{ obj.pronunciation }}): {{ obj.meaning }}</p>
+        {% endfor %}
+        
+        <hr>
+
+        <a href="{{ url_for('question') }}" role="button" style="margin-top: 1.5rem;">次の問題へ</a>
+    </div>
+{% endblock %}

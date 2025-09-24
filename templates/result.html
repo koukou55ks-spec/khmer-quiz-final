@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center;">
+        <hgroup>
+            <h1>結果発表！</h1>
+            <h2>あなたのスコアは <strong>{{ total }} 問中 {{ score }} 問正解</strong> でした！</h2>
+        </hgroup>
+        <a href="{{ url_for('index') }}" role="button" class="secondary">もう一度挑戦する</a>
+    </div>
+{% endblock %}

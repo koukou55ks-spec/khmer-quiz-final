@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+:root {
+    --primary-color: #ff00ff; --secondary-color: #00ffff; --card-bg-color: rgba(20, 20, 30, 0.85); --text-color: #f0f2f5; --heading-color: #ffffff; --border-radius: 24px; --box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); --transition-smooth: all 0.3s ease;
+}
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+}
+body {
+    font-family: 'Poppins', sans-serif; color: var(--text-color); background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradient-animation 15s ease infinite; min-height: 100vh; display: grid; place-items: center; padding: 1rem;
+}
+main.container {
+    max-width: 750px; width: 100%; padding: 3rem; background-color: var(--card-bg-color); border-radius: var(--border-radius); box-shadow: var(--box-shadow); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); animation: fade-in-up 0.6s ease-out forwards; opacity: 0;
+}
+@keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); }
+}
+h1, h2 {
+    color: var(--heading-color); text-shadow: 0 2px 15px rgba(0,0,0,0.3); text-align: center;
+}
+.theme-buttons {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;
+}
+button, a[role="button"] {
+    background: var(--primary-color); border: none; font-weight: 700; border-radius: 12px; padding: 14px 28px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 20px var(--primary-color); transition: var(--transition-smooth); color: white; text-decoration: none;
+}
+button:hover, a[role="button"]:hover {
+    transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 30px var(--primary-color);
+}
+.clicked, fieldset, label, label:hover, input[type="radio"]:checked + label {
+    animation: button-pop 0.3s ease; border: none; padding: 0; display: block; padding: 1.25rem; margin-bottom: 0.75rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; transition: var(--transition-smooth); border-color: var(--secondary-color); transform: scale(1.02); border-color: var(--primary-color); background-color: rgba(255, 0, 255, 0.1); box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+@keyframes button-pop { 0% { transform: scale(1); } 50% { transform: scale(0.9); } 100% { transform: scale(1); } }
