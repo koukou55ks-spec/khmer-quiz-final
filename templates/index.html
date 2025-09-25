@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <hgroup>
+        <h1>🇰🇭 クメール語単語クイズ 🇰🇭</h1>
+        <h2>挑戦したいテーマを選んでください！</h2>
+    </hgroup>
+    <div class="theme-buttons">
+        {% for theme in themes %}
+            <a href="{{ url_for('start_quiz', theme=theme) }}" role="button" class="theme-button" style="margin: 0;">
+                {{ theme }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

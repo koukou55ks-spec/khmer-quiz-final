@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center;">
+        {% if is_correct %}
+            <h1 style="color: var(--primary-color);">🎉 正解！ 🎉</h1>
+        {% else %}
+            <h1 style="color: var(--secondary-color);">❌ 不正解... ❌</h1>
+        {% endif %}
+        
+        <hr>
+        
+        <h2>{{ correct_question.meaning }}</h2>
+        
+        <article>
+            <div class="answer-line">
+                <p id="correct-khmer-text" style="font-size: 1.2em;">
+                    正解は「<strong>{{ correct_question.khmer }}</strong> ({{ correct_question.pronunciation }})」です。
+                </p>
+                <button id="speak-button" class="icon-button">🔊</button>
+            </div>
+        </article>
+        
+        <h3>💡選択肢の単語</h3>
+        {% for obj in choice_objects %}
+            <p>{{ obj.khmer }} ({{ obj.pronunciation }}): {{ obj.meaning }}</p>
+        {% endfor %}
+        
+        <hr>
+
+        <a href="{{ url_for('question') }}" role="button" style="margin-top: 1.5rem;">次の問題へ</a>
+
+        <div class="pronunciation-challenge">
+            <h3>🎤 発音チャレンジ！</h3>
+            <p>下のボタンを押して、マイクに向かってクメール語を発音してみよう！</p>
+            <button id="start-recognition">チャレンジする</button>
+
+            <div id="result-area" style="margin-top: 1rem;">
+                <p id="recognized-text"></p>
+                <h3 id="score-display"></h3>
+                <p id="score-feedback"></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
