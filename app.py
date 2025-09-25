@@ -3,7 +3,7 @@ import json
 import random
 
 app = Flask(__name__)
-app.secret_key = 'khmer_quiz_final_key'
+app.secret_key = 'khmer_quiz_master_key'
 
 def load_data():
     with open('questions.json', 'r', encoding='utf-8') as f:

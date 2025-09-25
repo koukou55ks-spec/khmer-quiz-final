@@ -30,3 +30,17 @@ button:hover, a[role="button"]:hover {
     animation: button-pop 0.3s ease; border: none; padding: 0; display: block; padding: 1.25rem; margin-bottom: 0.75rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; transition: var(--transition-smooth); border-color: var(--secondary-color); transform: scale(1.02); border-color: var(--primary-color); background-color: rgba(255, 0, 255, 0.1); box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
 }
 @keyframes button-pop { 0% { transform: scale(1); } 50% { transform: scale(0.9); } 100% { transform: scale(1); } }
+.pronunciation-challenge { margin-top: 2rem; padding: 1.5rem; background-color: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius); border: 1px solid rgba(255, 255, 255, 0.1); }
+#start-recognition { background: var(--secondary-color); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 0 20px var(--secondary-color); }
+#start-recognition:hover { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 30px var(--secondary-color); }
+.recording { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+#result-area { min-height: 100px; }
+#score-display { font-size: 3rem; font-weight: 700; margin: 0.5rem 0; }
+.score-high { color: #00ff7f; }
+.score-mid { color: #ffd700; }
+.score-low { color: #ff6347; }
+.answer-line { display: flex; justify-content: center; align-items: center; gap: 1rem; }
+.answer-line p { margin: 0; }
+.icon-button { background: none; border: none; font-size: 2rem; padding: 0; cursor: pointer; transition: transform 0.2s ease; box-shadow: none; }
+.icon-button:hover { transform: scale(1.2); box-shadow: none; }

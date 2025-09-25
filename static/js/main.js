@@ -1,7 +1,23 @@
-// スコア計算用のヘルパー関数
+// ============== 文字列正規化用のヘルパー関数 ==============
+// カタカナをひらがなに、記号や長音符を削除して比較しやすくする
+function normalizeString(str) {
+    if (!str) return '';
+    // カタカナをひらがなに変換
+    let hiragana = str.replace(/[\u30a1-\u30f6]/g, (match) => 
+        String.fromCharCode(match.charCodeAt(0) - 0x60)
+    );
+    // 長音符「ー」を削除し、句読点や記号も削除
+    return hiragana.replace(/ー|。|、|？|！|\s/g, '');
+}
+
+// ============== スコア計算用のヘルパー関数 ==============
+// レーベンシュタイン距離を計算して、類似度スコア(0-100)を返す
 function calculateSimilarity(str1, str2) {
-    const s1 = str1.replace(/\s/g, '');
-    const s2 = str2.replace(/\s/g, '');
+    // --- ▼▼▼ ここで正規化処理を追加 ▼▼▼ ---
+    const s1 = normalizeString(str1);
+    const s2 = normalizeString(str2);
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
+
     if (s1 === s2) return 100;
     const longer = s1.length > s2.length ? s1 : s2;
     const shorter = s1.length > s2.length ? s2 : s1;
@@ -32,7 +48,7 @@ function calculateSimilarity(str1, str2) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- アニメーション処理 ---
+    // --- 既存のアニメーション処理 ---
     const mainContainer = document.querySelector('main.container');
     if (mainContainer) mainContainer.style.opacity = '1';
 
@@ -48,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 発音チャレンジ機能 ---
+    // --- 発音チャレンジ機能 (スコア計算付き) ---
     const startButton = document.getElementById('start-recognition');
     const articleElement = document.querySelector('article');
     const recognizedTextElement = document.getElementById('recognized-text');
@@ -65,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
             recognition.lang = 'ja-JP';
             recognition.interimResults = false;
 
-            // ▼▼▼ 認識開始と終了のイベントハンドラを明確に追加 ▼▼▼
             recognition.onstart = () => {
                 startButton.textContent = '話してください...';
                 startButton.classList.add('recording');
@@ -78,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 startButton.textContent = 'もう一度チャレンジ';
                 startButton.classList.remove('recording');
             };
-            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
             recognition.onresult = (event) => {
                 const spokenText = event.results[0][0].transcript;
@@ -101,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             recognition.onerror = (event) => {
-                // service-not-allowedエラーの場合、より分かりやすいメッセージを表示
                 if (event.error === 'service-not-allowed' || event.error === 'not-allowed') {
                     recognizedTextElement.textContent = 'エラー: マイクの使用が許可されていません。';
                 } else {
