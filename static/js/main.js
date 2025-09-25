@@ -32,7 +32,7 @@ function calculateSimilarity(str1, str2) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 既存のアニメーション処理 ---
+    // --- アニメーション処理 ---
     const mainContainer = document.querySelector('main.container');
     if (mainContainer) mainContainer.style.opacity = '1';
 
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 発音チャレンジ機能 (スコア計算付き) ---
+    // --- 発音チャレンジ機能 ---
     const startButton = document.getElementById('start-recognition');
     const articleElement = document.querySelector('article');
     const recognizedTextElement = document.getElementById('recognized-text');
@@ -57,22 +57,32 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition && articleElement) {
-        // --- ▼▼▼ここからが変更点▼▼▼ ---
-        // recognitionオブジェクトの作成を、ボタンがクリックされた時に移動
-
+        
         const correctAnswerPronunciation = articleElement.querySelector('p').textContent.match(/\((.*?)\)/)[1].trim();
 
         startButton.addEventListener('click', () => {
-            // ボタンが押されるたびに、新しい音声認識オブジェクトを作成する
             const recognition = new SpeechRecognition();
             recognition.lang = 'ja-JP';
             recognition.interimResults = false;
 
-            // 認識が結果を返した時の処理を、毎回設定し直す
+            // ▼▼▼ 認識開始と終了のイベントハンドラを明確に追加 ▼▼▼
+            recognition.onstart = () => {
+                startButton.textContent = '話してください...';
+                startButton.classList.add('recording');
+                recognizedTextElement.textContent = '';
+                scoreDisplayElement.textContent = '';
+                scoreFeedbackElement.textContent = '';
+            };
+
+            recognition.onend = () => {
+                startButton.textContent = 'もう一度チャレンジ';
+                startButton.classList.remove('recording');
+            };
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
             recognition.onresult = (event) => {
                 const spokenText = event.results[0][0].transcript;
                 recognizedTextElement.textContent = `あなたの発音: 「${spokenText}」`;
-
                 const score = calculateSimilarity(spokenText, correctAnswerPronunciation);
                 
                 scoreDisplayElement.textContent = `${score} 点`;
@@ -90,31 +100,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // 認識が終了した時の処理
-            recognition.onend = () => {
-                startButton.textContent = 'もう一度チャレンジ';
-                startButton.classList.remove('recording');
-            };
-
-            // エラー処理
             recognition.onerror = (event) => {
-                recognizedTextElement.textContent = `エラーが発生しました: ${event.error}`;
+                // service-not-allowedエラーの場合、より分かりやすいメッセージを表示
+                if (event.error === 'service-not-allowed' || event.error === 'not-allowed') {
+                    recognizedTextElement.textContent = 'エラー: マイクの使用が許可されていません。';
+                } else {
+                    recognizedTextElement.textContent = `エラーが発生しました: ${event.error}`;
+                }
                 startButton.classList.remove('recording');
             };
             
-            // 準備ができたので、音声認識を開始する
             try {
                 recognition.start();
-                startButton.textContent = '話してください...';
-                startButton.classList.add('recording');
-                recognizedTextElement.textContent = '';
-                scoreDisplayElement.textContent = '';
-                scoreFeedbackElement.textContent = '';
             } catch (error) {
                 recognizedTextElement.textContent = 'エラー: 既に開始されています。';
             }
         });
-        // --- ▲▲▲ここまでが変更点▲▲▲ ---
 
     } else {
         if(startButton) {
@@ -129,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if ('speechSynthesis' in window && khmerTextElement) {
         const textToSpeak = khmerTextElement.querySelector('strong').textContent.trim();
         speakButton.addEventListener('click', () => {
-            // 読み上げ中に、他の音声認識が動かないように一旦停止する
             window.speechSynthesis.cancel(); 
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'km-KH';
